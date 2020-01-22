@@ -3,12 +3,13 @@ import base64
 from datetime import datetime
 import os
 import shutil
+import cv2
 
 import numpy as np
 import socketio
 import eventlet
 import eventlet.wsgi
-from PIL import Image
+from PIL import Image, ImageDraw
 from flask import Flask
 from io import BytesIO
 
@@ -72,6 +73,8 @@ def telemetry(sid, data):
         if args.image_folder != '':
             timestamp = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]
             image_filename = os.path.join(args.image_folder, timestamp)
+            d = ImageDraw.Draw(image)
+            d.text((20,160), "Autonomous Mode, Steering Angle: " + str(steering_angle), fill=(255,255,255))
             image.save('{}.jpg'.format(image_filename))
     else:
         # NOTE: DON'T EDIT THIS.
